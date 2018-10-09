@@ -13,6 +13,8 @@ var pluckFirstLineFromFile = function (err, filePath) {
     fs.readFile(filePath, (err, pluck) => {
       if (err) {
         callback(new Error('Cannot read file'));
+      } else {
+        var plucked; //figure way to get first line
       }
     });
   }
@@ -20,7 +22,18 @@ var pluckFirstLineFromFile = function (err, filePath) {
 
 // This function should retrieve the status code of a GET request to `url`
 var getStatusCode = function (err, url) {
-  // TODO
+  if (err) {
+    callback(err)
+  } else {
+    request(url, (err) => {
+      if (err) {
+        callback(err)
+      } else {
+        
+      }
+    }
+  }
+
 };
 
 // Export these functions so we can test them and reuse them in later exercises
