@@ -10,11 +10,14 @@
 
 var fs = require('fs');
 var Promise = require('bluebird');
+var prom = require('./promisification');
+var readFileAsync = Promise.promisify(fs.readFile);
+var writeFileAsync = Promise.promisify(fs.writeFile);
 
 /*
 var someVal = 0;
 
-Prmise.resolve(someVal)
+Promise.resolve(someVal)
   .then((value) => {
     value === 0 //true
     return readFilePromise(someFilePath);
@@ -34,6 +37,28 @@ Prmise.resolve(someVal)
 
 var fetchProfileAndWriteToFile = function(readFilePath, writeFilePath) {
   // TODO
+  // read '/blah/blah/github.txt'
+  // take first line
+  // GET request to github (request, response)
+  // from json response --> writeFilePath '/blah/blah/response.txt'
+  return readFileAsync(readFilePath)
+    .then((fileData) => {
+      var firstLine = fileData.toString().split('\n').shift();
+      //console.log('AAAAAAAAAAA:', firstLine);
+      return prom.getGitHubProfileAsync(firstLine);
+    })
+    .then((body) => {
+      //console.log('CCCCCCCCCCCCCCCCCCC');
+      //console.log(body);
+      return writeFileAsync(writeFilePath, JSON.stringify(body));
+    })
+    .catch((err) => (err));
+  
+  
+  // fs.readFile(readFilePath, (err, fileData) => {
+    
+  // }); 
+
 };
 
 // Export these functions so we can test them
